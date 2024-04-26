@@ -12,22 +12,27 @@ router.get("/getallrooms", async (req, res) => {
   }
 });
 
+// Add a route to delete a room by ID
+router.delete("/delete/:roomId", async (req, res) => {
+  try {
+    const roomId = req.params.roomId;
+    const deletedRoom = await Room.findByIdAndDelete(roomId);
+    if (!deletedRoom) {
+      return res.status(404).json({ message: "Room not found" });
+    }
+    res.json({ message: "Room deleted successfully" });
+  } catch (error) {
+    console.error("Delete room error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 router.post("/getroombyid", async (req, res) => {
   try {
     const roomid = req.body.roomid;
     const room = await Room.findOne({ _id: roomid });
     res.send(room);
   } catch (error) {
-    return res.status(400).json({ message: error });
-  }
-});
-
-router.post("/getallrooms", async (req, res) => {
-  try {
-    const rooms = await Room.find();
-    res.send(rooms);
-  } catch (error) {
-    console.log(error);
     return res.status(400).json({ message: error });
   }
 });
