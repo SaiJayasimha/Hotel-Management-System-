@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Table, Tag, Space } from "antd";
+import { Table, Button } from "antd";
 
 import Loader from "../components/Loader";
 import Error from "../components/Error";
@@ -10,52 +10,87 @@ function AdminRoomScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const fetchRooms = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      const { data } = await axios.get("/api/rooms/getallrooms");
+      setRooms(data);
+    } catch (error) {
+      console.log(error);
+      setError("Error fetching rooms");
+    }
+    setLoading(false);
+  };
+
+  const handleDelete = async (roomId) => {
+    try {
+      await axios.delete(`/api/rooms/delete/${roomId}`);
+      fetchRooms(); // Fetch rooms again after deletion
+    } catch (error) {
+      console.log(error);
+      setError("Error deleting room");
+    }
+  };
+
+  useEffect(() => {
+    fetchRooms();
+  }, []);
+
   const columns = [
     {
-      title: "roomid",
+      title: "Room ID",
       dataIndex: "_id",
       key: "_id",
     },
     {
-      title: "name",
+      title: "Name",
       dataIndex: "name",
       key: "name",
     },
-    { title: "maxcount", dataIndex: "maxcount", key: "maxcount" },
-    { title: "phonenumber", dataIndex: "phonenumber", key: "phonenumber" },
-    { title: "rentperday", dataIndex: "rentperday", key: "rentperday" },
-    { title: "type", dataIndex: "type", key: "type" },
+    {
+      title: "Max Count",
+      dataIndex: "maxcount",
+      key: "maxcount",
+    },
+    {
+      title: "Phone Number",
+      dataIndex: "phonenumber",
+      key: "phonenumber",
+    },
+    {
+      title: "Rent Per Day",
+      dataIndex: "rentperday",
+      key: "rentperday",
+    },
+    {
+      title: "Type",
+      dataIndex: "type",
+      key: "type",
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (text, record) => (
+        <Button danger onClick={() => handleDelete(record._id)}>
+          Delete
+        </Button>
+      ),
+    },
   ];
-
-  async function fetchMyData() {
-    setError("");
-    setLoading(true);
-    try {
-      const data = (await axios.post("/api/rooms/getallrooms")).data;
-      setRooms(data);
-    } catch (error) {
-      console.log(error);
-      setError(error);
-    }
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    fetchMyData();
-  }, []);
 
   return (
     <div className="row">
       {loading ? (
-        <Loader></Loader>
-      ) : error.length > 0 ? (
-        <Error msg={error}></Error>
+        <Loader />
+      ) : error ? (
+        <Error msg={error} />
       ) : (
         <>
           <div className="col md-12">
-            <button className="btn btn-success" onClick={fetchMyData}>
+            <Button className="btn btn-success" onClick={fetchRooms}>
               Refresh
-            </button>
+            </Button>
           </div>
           <div className="col-md-12">
             <Table columns={columns} dataSource={rooms} />
