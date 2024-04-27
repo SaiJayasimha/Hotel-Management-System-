@@ -5,6 +5,8 @@ import axios from "axios";
 import MyBookingScreen from "./MyBookingScreen";
 const { TabPane } = Tabs;
 
+// Add your imports here
+
 function ProfileScreen() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("currentUser")));
   const [editing, setEditing] = useState(false);
@@ -65,7 +67,7 @@ function ProfileScreen() {
           </div>
         </TabPane>
         <TabPane tab="Booking" key="2">
-          <MyBookingScreen></MyBookingScreen>
+          <MyBookingScreen />
         </TabPane>
       </Tabs>
     </div>

@@ -63,4 +63,21 @@ router.post("/updateUser", async (req, res) => {
   }
 });
 
+router.post("/removeFromQueue", async (req, res) => {
+  try {
+    const { userid, roomid } = req.body;
+    const user = await User.findById(userid);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    // Logic to remove room from user's queue
+    // Example: user.queue.pull(roomid);
+    await user.save();
+    res.json({ message: "Room removed from queue successfully" });
+  } catch (error) {
+    console.error("Error removing room from queue:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = router;

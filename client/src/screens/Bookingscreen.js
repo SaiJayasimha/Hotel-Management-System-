@@ -47,7 +47,7 @@ function Bookingscreen({ match }) {
     const totaldays = moment.duration(todate.diff(fromdate)).asDays() + 1;
     setTotalDays(totaldays);
     setTotalAmount(totalDays * room.rentperday);
-  }, [room]);
+  }, [room, totalDays, totalAmount]);
 
   const onToken = async (token) => {
     console.log(token);
@@ -73,21 +73,26 @@ function Bookingscreen({ match }) {
         window.location.href = "/home";
       });
     } catch (error) {
-      setError(error);
-      Swal.fire("Opps", "Error:" + error, "error");
+      setError("Error: " + error.response.data.message);
+      Swal.fire("Oops", "Error: " + error.response.data.message, "error");
     }
     setLoading(false);
-    //TESTING CARD
-    //https://stripe.com/docs/testing
-    //https://www.npmjs.com/package/react-stripe-checkout
-    // fetch("/save-stripe-token", {
-    //   method: "POST",
-    //   body: JSON.stringify(token),
-    // }).then((response) => {
-    //   response.json().then((data) => {
-    //     alert(`We are in business, ${data.email}`);
-    //   });
-    // });
+  };
+
+  const addToQueue = async () => {
+    try {
+      setLoading(true);
+      const result = await axios.post("/api/users/addToQueue", {
+        userid: JSON.parse(localStorage.getItem("currentUser"))._id,
+        roomid: roomid,
+      });
+      setLoading(false);
+      Swal.fire("Success", "Room added to your queue", "success");
+    } catch (error) {
+      setError("Error: " + error.response.data.message);
+      Swal.fire("Oops", "Error: " + error.response.data.message, "error");
+    }
+    setLoading(false);
   };
 
   return (
@@ -134,6 +139,9 @@ function Bookingscreen({ match }) {
               >
                 <button className="btn btn-primary">Pay Now</button>
               </StripeCheckout>
+              <button className="btn btn-success ml-3" onClick={addToQueue}>
+                Add to Queue
+              </button>
             </div>
           </div>
         </div>
@@ -143,3 +151,4 @@ function Bookingscreen({ match }) {
 }
 
 export default Bookingscreen;
+

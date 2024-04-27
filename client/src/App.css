@@ -39,3 +39,25 @@
 
 /* kkkkkkkkkkkkk */
 
+.captcha-container {
+  margin-bottom: 10px;
+}
+
+.captcha-box {
+  display: inline-block;
+  padding: 10px;
+  background-color: #333;
+  color: #fff;
+  font-size: 18px;
+  font-family: Arial, sans-serif; /* Specify the desired font family */
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.captcha-box:hover {
+  cursor: pointer;
+}
+
+.form-control {
+  margin-bottom: 10px;
+}
