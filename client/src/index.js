@@ -1,33 +1,17 @@
-import React from "react";
-import { BrowserRouter, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Homescreen from "./screens/Homescreen";
-import Bookingscreen from "./screens/Bookingscreen";
-import RegisterScreen from "./screens/RegisterScreen";
-import LoginScreen from "./screens/LoginScreen";
-import ProfileScreen from "./screens/ProfileScreen";
-import AdminScreen from "./screens/AdminScreen";
-import LandingScreen from "./screens/LandingScreen";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
 
-function App() {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <Navbar />
-        <Route path="/" exact component={LandingScreen} />
-        <Route path="/home" exact component={Homescreen} />
-        <Route
-          path="/book/:roomid/:fromdate/:todate"
-          exact
-          component={Bookingscreen}
-        />
-        <Route path="/register" exact component={RegisterScreen} />
-        <Route path="/login" exact component={LoginScreen} />
-        <Route path="/profile" exact component={ProfileScreen} />
-        <Route path="/admin" exact component={AdminScreen} />
-      </BrowserRouter>
-    </div>
-  );
-}
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
 
-export default App;
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
